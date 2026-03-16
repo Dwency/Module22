@@ -1,165 +1,86 @@
 <!DOCTYPE html>
-<html>
-    
-<html lang = "fr">
-    <head> 
-        <meta charset="utf-8">
-        <title>Responsive Lay</title>
-        <style>
-            *{
-                box-sizing: border-box;
-            }
-            h1{
-                margin-bottom: 15px;
-            }
-            p {
-                width: 90%;
-                height: 150px;
-                border: 1px solid black;
-                background-color: #A52A2A;
-                margin-right: auto;
-                margin-left: auto;
-                font-family: Helvetica;
-                color: white;
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Layout Beautifié</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 2em;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .col {
+            background: linear-gradient(135deg, #A52A2A, #8B0000);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            flex: 1 1 calc(25% - 20px);
+            min-width: 250px;
+            text-align: justify;
+            transition: transform 0.3s;
+        }
+        .col:hover {
+            transform: translateY(-5px);
+        }
 
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .col {
+                flex: 1 1 calc(33% - 20px);
             }
-          .row{
-            width: 100%;
-          }
-
-          @media (min-width: 1200px) {
-            .col-lg-1, .col-lg-2, .col-lg-3, 
-             .col-lg-4, .col-lg-5, .col-lg-6,
-            .col-lg-7, .col-lg-8, .col-lg-9,  
-            .col-lg-10, .col-lg-11, .col-lg-12{
-                float: left;
-                border: 1px solid green;
+        }
+        @media (max-width: 950px) {
+            .col {
+                flex: 1 1 calc(50% - 20px);
             }
-            .col-lg-1{
-                width: 8.33%;
+        }
+        @media (max-width: 600px) {
+            .col {
+                flex: 1 1 100%;
             }
-            .col-lg-2{
-                width: 16.66%;
-            }
-            .col-lg-3{
-                width: 25%;
-            }
-            v
-            .col-lg-4{
-                width: 33%;
-            }
-            .col-lg-5{
-                width: 44.66%;
-            }
-            .col-lg-6{
-                width: 50%;
-            }
-            .col-lg-7{
-                width: 58.33%;
-            }
-            .col-lg-8{
-                width: 66.66%;
-            }
-            .col-lg-9{
-                width: 74.99%;
-            }
-            .col-lg-10{
-                width: 83.33%;
-            }
-            .col-lg-11{
-                width: 91.66%;
-            }
-            .col-lg-12{
-                width: 100%;
-            }
-          }
-
-          @media (min-width: 950px) and (max-width: 1199px)  {
-            .col-md-1, .col-md-2, .col-md-3, 
-             .col-md-4, .col-md-5, .col-md-6,
-            .col-md-7, .col-md-8, .col-md-9,  
-            .col-md-10, .col-md-11, .col-md-12{
-                float: left;
-                border: 1px solid green;
-            }
-            .col-md-1{
-                width: 8.33%;
-            }
-            .col-md-2{
-                width: 16.66%;
-            }
-            .col-md-3{
-                width: 25%;
-            }
-            v
-            .col-md-4{
-                width: 33%;
-            }
-            .col-md-5{
-                width: 44.66%;
-            }
-            .col-md-6{
-                width: 50%;
-            }
-            .col-md-7{
-                width: 58.33%;
-            }
-            .col-md-8{
-                width: 66.66%;
-            }
-            .col-md-9{
-                width: 74.99%;
-            }
-            .col-md-10{
-                width: 83.33%;
-            }
-            .col-md-11{
-                width: 91.66%;
-            }
-            .col-md-12{
-                width: 100%;
-            }
-          }
-        </style>
-    </head>
-    <body>
-        <h1>Responsive Layout</h1>
-        <div class="row" >
-            <div class="col-lg-3 col-md-6"><p>Pour le Pays, pour les Ancêtres  Marchons unis, marchons unis 
-                Dans nos rangs point de traîtres  Du sol soyons seuls maîtres 
-                Marchons unis, marchons unis  Pour le Pays, pour les Ancêtres 
-                Marchons, marchons, marchons unis  Pour le Pays, pour les 
-                Ancêtres</p></div>
-            <div class="col-lg-3 col-md-6"><p>Pour les Aïeux, pour la Patrie  Béchons joyeux, béchons joyeux 
-                Quand le champ fructifie  L'âme se fortifie  Béchons joyeux, 
-                béchons joyeux  Pour les Aïeux, pour la Patrie  Béchons, béchons, 
-                béchons joyeux  Pour les Aïeux, pour la Patrie</p></div>
-            <div class="col-lg-3 col-md-6"><p>Pour le Pays et pour nos Pères  Formons des Fils, formons des Fils 
-                Libres, forts et prospères  Toujours nous serons frères  Formons 
-                des Fils, formons des Fils  Pour le Pays et pour nos Pères 
-                Formons, formons, formons des Fils  Pour le Pays et pour nos 
-                Pères</p></div>
-            <div class="col-lg-3 col-md-6"><p>Pour les Aïeux, pour la Patrie  O Dieu des Preux, O Dieu des Preux 
-                Sous ta garde infinie  Prends nos droits, notre vie  O Dieu des 
-                Preux, O Dieu des Preux  Pour les Aïeux, pour la Patrie  O Dieu, O 
-                Dieu, O Dieu des Preux  Pour les Aïeux, pour la Patrie </p></div>
-            <div class="col-lg-3 col-md-6"><p>Pour le Drapeau, pour la Patrie  Mourir est beau, mourir est beau 
-                Notre passé nous crie:  Ayez l'âme aguerrie  Mourir est beau, 
-                mourir est beau  Pour le Drapeau, pour la Patrie  Mourir, mourir, 
-                mourir est beau  Pour le Drapeau, pour la Patrie</p></div>
-            <div class="col-lg-3 col-md-6"><p>Pour le Drapeau, pour la Patrie  Mourir est beau, mourir est beau 
-                Notre passé nous crie:  Ayez l'âme aguerrie  Mourir est beau, 
-                mourir est beau  Pour le Drapeau, pour la Patrie  Mourir, mourir, 
-                mourir est beau  Pour le Drapeau, pour la Patrie</p></div>
-            <div class="col-lg-3 col-md-6"><p>Pour le Drapeau, pour la Patrie  Mourir est beau, mourir est beau 
-                Notre passé nous crie:  Ayez l'âme aguerrie  Mourir est beau, 
-                mourir est beau  Pour le Drapeau, pour la Patrie  Mourir, mourir, 
-                mourir est beau  Pour le Drapeau, pour la Patrie</p></div>
-            <div class="col-lg-3 col-md-6"><p>Pour le Drapeau, pour la Patrie  Mourir est beau, mourir est beau 
-                Notre passé nous crie:  Ayez l'âme aguerrie  Mourir est beau, 
-                mourir est beau  Pour le Drapeau, pour la Patrie  Mourir, mourir, 
-                mourir est beau  Pour le Drapeau, pour la Patrie</p></div>
+        }
+    </style>
+</head>
+<body>
+    <h1>Pour le Pays et les Ancêtres</h1>
+    <div class="row">
+        <div class="col">
+            Pour le Pays, pour les Ancêtres Marchons unis, marchons unis Dans nos rangs point de traîtres Du sol soyons seuls maîtres Marchons unis, marchons unis Pour le Pays, pour les Ancêtres Marchons, marchons, marchons unis Pour le Pays, pour les Ancêtres
         </div>
-       
-    </body>
+        <div class="col">
+			Pour le Pays et pour nos Pères Formons des Fils, formons des Fils Libres, forts et prospères Toujours nous serons frères Formons des Fils, formons des Fils Pour le Pays et pour nos Pères Formons, formons, formons des Fils Pour le Pays et pour nos Pères        </div>
+        <div class="col">
+			Pour les Aïeux, pour la Patrie O Dieu des Preux, O Dieu des Preux Sous ta garde infinie Prends nos droits, notre vie O Dieu des Preux, O Dieu des Preux Pour les Aïeux, pour la Patrie O Dieu, O Dieu, O Dieu des Preux Pour les Aïeux, pour la Patrie        </div>
+        <div class="col">
+            Pour les Aïeux, pour la Patrie… O Dieu des Preux, O Dieu des Preux…
+        </div>
+        <div class="col">
+			Pour le Drapeau, pour la Patrie Mourir est beau, mourir est beau Notre passé nous crie: Ayez l'âme aguerrie Mourir est beau, mourir est beau Pour le Drapeau, pour la Patrie Mourir, mourir, mourir est beau Pour le Drapeau, pour la Patrie        </div>
+        <div class="col">
+			Pou Ayiti peyi Zansèt yo Se pou n mache men nan lamen Nan mitan n pa fèt pou gen trèt Nou fèt pou n sèl mèt tèt nou An nou mache men nan lamen Pou Ayiti ka vin pi bèl An nou, an nou, met tèt ansanm Pou Ayiti onon tout Zansèt yo.        </div>
+        <div class="col">
+			Pou Ayiti onon Zansèt yo Se pou n sekle se pou n plante Se nan tè tout fòs nou chita Se li k ba nou manje Ann bite tè, ann voye wou Ak kè kontan, fòk tè a bay. Sekle, wouze, fanm kou gason Pou n rive viv ak sèl fòs ponyèt nou.        </div>
+        <div class="col">
+			Pou Ayiti ak pou Zansèt yo Fò nou kapab vanyan gason Moun pa fèt pou ret avèk moun Se sa k fè tout Manman ak tout Papa Dwe pou voye Timoun lekòl Pou yo aprann, pou yo konnen Sa Tousen, Desalin, Kristòf, Petyon Te fè pou wet Ayisyen anba bòt blan.        </div>
+    </div>
+</body>
 </html>
