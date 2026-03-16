@@ -1,99 +1,189 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hymne a la dessalinienne</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Helvetica', sans-serif;
-            background-color: #f0f0f0;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 2em;
-        }
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-        .col {
-            background: linear-gradient(135deg, #A52A2A, #8B0000);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-            flex: 1 1 calc(25% - 20px);
-            min-width: 250px;
-            text-align: justify;
-            transition: transform 0.3s;
-        }
-        .col:hover {
-            transform: translateY(-5px);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hymne de Dessalinne</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .col {
-                flex: 1 1 calc(33% - 20px);
-            }
-        }
-        @media (max-width: 950px) {
-            .col {
-                flex: 1 1 calc(50% - 20px);
-            }
-        }
-        @media (max-width: 600px) {
-            .col {
-                flex: 1 1 100%;
-            }
-        }
-    </style>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #b22222;
+      font-size: 3em;
+      text-shadow: 2px 2px #eee;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .couplet {
+      background: #fff5f5;
+      border-left: 8px solid #b22222;
+      padding: 20px;
+      margin: 15px 0;
+      width: 90%;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeUp 1s ease forwards;
+      opacity: 0;
+    }
+
+    .couplet:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .lang {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .lang p {
+      flex: 1 1 45%;
+      background: #b22222;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      line-height: 1.6;
+      animation: fadeIn 2s ease;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      0% { transform: translateY(20px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    footer {
+      margin-top: 50px;
+      color: #555;
+      text-align: center;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      .lang p {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <h1>La dessalinienne</h1>
-    <div class="row">
-        <div class="col">
-            Pour le Pays, pour les Ancêtres Marchons unis, marchons unis Dans nos rangs point de traîtres Du sol soyons seuls maîtres Marchons unis, marchons unis Pour le Pays, pour les Ancêtres Marchons, marchons, marchons unis Pour le Pays, pour les Ancêtres
-        </div>
-        <div class="col">
-			Pour le Pays et pour nos Pères Formons des Fils, formons des Fils Libres, forts et prospères Toujours nous serons frères Formons des Fils, formons des Fils Pour le Pays et pour nos Pères Formons, formons, formons des Fils Pour le Pays et pour nos Pères        </div>
-        <div class="col">
-			Pour les Aïeux, pour la Patrie O Dieu des Preux, O Dieu des Preux Sous ta garde infinie Prends nos droits, notre vie O Dieu des Preux, O Dieu des Preux Pour les Aïeux, pour la Patrie O Dieu, O Dieu, O Dieu des Preux Pour les Aïeux, pour la Patrie        </div>
-        <div class="col">
-Pour les aïeux, pour la patrie
-Béchons joyeux, béchons joyeux
-Quand le champ fructifie
-L'âme se fortifiePour les aïeux, pour la patrie
+  <h1>Hymne de Dessalinne 🇭🇹</h1>
+
+  <div class="couplet">
+    <div class="lang">
+      <p> Pour le pays, pour les ancêtres
+Marchons unis, marchons unis
+Dans nos rangs point de traîtres
+Du sol soyons seuls maîtres
+Marchons unis, marchons unis
+Pour le pays, pour les ancêtres
+Marchons, marchons, marchons unis
+Pour le pays, pour les ancêtres 
+</p>
+      <p>Pou Peyi a, pou Zansèt yo, ann mache ini... (CR)</p>
+    </div>
+  </div>
+
+  <div class="couplet">
+    <div class="lang">
+      <p> Pour les aïeux, pour la patrie
 Béchons joyeux, béchons joyeux
 Quand le champ fructifie
 L'âme se fortifie
 Béchons joyeux, béchons joyeux
 Pour les aïeux, pour la Patrie
 Béchons, béchons, béchons joyeux
-Pour les aïeux, pour la Patrie 
-Béchons joyeux, béchons joyeux
-Pour les aïeux, pour la Patrie
-Béchons, béchons, béchons joyeux
-Pour les aïeux, pour la Patrie         </div>
-        <div class="col">
-			Pour le Drapeau, pour la Patrie Mourir est beau, mourir est beau Notre passé nous crie: Ayez l'âme aguerrie Mourir est beau, mourir est beau Pour le Drapeau, pour la Patrie Mourir, mourir, mourir est beau Pour le Drapeau, pour la Patrie        </div>
-        <div class="col">
-			Pou Ayiti peyi Zansèt yo Se pou n mache men nan lamen Nan mitan n pa fèt pou gen trèt Nou fèt pou n sèl mèt tèt nou An nou mache men nan lamen Pou Ayiti ka vin pi bèl An nou, an nou, met tèt ansanm Pou Ayiti onon tout Zansèt yo.        </div>
-        <div class="col">
-			Pou Ayiti onon Zansèt yo Se pou n sekle se pou n plante Se nan tè tout fòs nou chita Se li k ba nou manje Ann bite tè, ann voye wou Ak kè kontan, fòk tè a bay. Sekle, wouze, fanm kou gason Pou n rive viv ak sèl fòs ponyèt nou.        </div>
-        <div class="col">
-			Pou Ayiti ak pou Zansèt yo Fò nou kapab vanyan gason Moun pa fèt pou ret avèk moun Se sa k fè tout Manman ak tout Papa Dwe pou voye Timoun lekòl Pou yo aprann, pou yo konnen Sa Tousen, Desalin, Kristòf, Petyon Te fè pou wet Ayisyen anba bòt blan.        </div>
+Pour les aïeux, pour la Patrie </p>
+      <p>Pou zansèt yo, pou Patrie a, n’ap bèkè kè kontan... (CR)</p>
     </div>
+  </div>
+
+  <div class="couplet">
+    <div class="lang">
+      <p> Pour le pays et pour nos pères
+Formons des fils, formons des fils
+Libres, forts et prospères
+Toujours nous serons frères
+Formons des fils, formons des fils
+Pour le pays et pour nos pères
+Formons, formons, formons des fils
+Pour le pays et pour nos pères </p>
+      <p>Pou Drapo a, pou Patrie a, mouri se bèl bagay... (CR)</p>
+    </div>
+  </div>
+
+
+  <div class="couplet">
+    <div class="lang">
+      <p>Pour les aïeux, pour la patrie
+Ô Dieu des preux, ô Dieu des preux
+Sous ta garde infinie
+Prends nos droits, notre vie
+Ô Dieu des preux, ô Dieu des preux
+Pour les aïeux, pour la Patrie
+Ô Dieu, ô Dieu, ô Dieu des preux
+Pour les aïeux, pour la Patrie </p>
+      <p>Pou Drapo a, pou Patrie a, mouri se bèl bagay... (CR)</p>
+    </div>
+  </div>
+  
+  
+  <div class="couplet">
+    <div class="lang">
+      <p>PPour le drapeau, pour la Patrie
+Mourir est beau, mourir est beau
+Notre passé nous crie :
+Ayez l'âme aguerrie
+Mourir est beau, mourir est beau
+Pour le drapeau, pour la Patrie
+Mourir, mourir, mourir est beau
+Pour le drapeau, pour la Patrie</p>
+      <p>Pou Drapo a, pou Patrie a, mouri se bèl bagay... (CR)</p>
+    </div>
+  </div>
+  
+  <footer>
+    &copy; 2026 Hymne de Dessalinne - Site animé et responsive
+  </footer>
+
+  <script>
+    // Faire apparaître les couplets avec un petit delay
+    const couplets = document.querySelectorAll('.couplet');
+    couplets.forEach((c, i) => {
+      setTimeout(() => {
+        c.style.opacity = 1;
+      }, i * 400); // 0.4s entre chaque
+    });
+  </script>
 </body>
 </html>
