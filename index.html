@@ -1,189 +1,315 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hymne de Dessalinne</title>
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>La Dessalinienne</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
-    body {
-      background: linear-gradient(to right, #fdfbfb, #ebedee);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px;
-    }
+    <style>
+        body {
+            margin: 0;
+            font-family: Poppins;
+            background: linear-gradient(180deg, #00209f, #d21034);
+            color: white;
+            text-align: center;
+        }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #b22222;
-      font-size: 3em;
-      text-shadow: 2px 2px #eee;
-      animation: fadeIn 2s ease-in-out;
-    }
+        /* HEADER */
 
-    .couplet {
-      background: #fff5f5;
-      border-left: 8px solid #b22222;
-      padding: 20px;
-      margin: 15px 0;
-      width: 90%;
-      max-width: 900px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-      animation: fadeUp 1s ease forwards;
-      opacity: 0;
-    }
+        header {
+            padding: 40px;
+            animation: fadeDown 1.5s;
+        }
 
-    .couplet:hover {
-      transform: scale(1.03);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
+        h1 {
+            font-size: 45px;
+            letter-spacing: 2px;
+        }
 
-    .lang {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 20px;
-    }
+        .flag {
+            width: 200px;
+            margin: auto;
+            display: block;
+            animation: flagWave 3s infinite ease-in-out;
+        }
 
-    .lang p {
-      flex: 1 1 45%;
-      background: #b22222;
-      color: white;
-      padding: 15px;
-      border-radius: 8px;
-      line-height: 1.6;
-      animation: fadeIn 2s ease;
-    }
+        @keyframes flagWave {
+            0% {
+                transform: rotate(0deg);
+            }
 
-    /* Animations */
-    @keyframes fadeUp {
-      0% { transform: translateY(20px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
+            50% {
+                transform: rotate(3deg);
+            }
 
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
 
-    footer {
-      margin-top: 50px;
-      color: #555;
-      text-align: center;
-      font-size: 0.9em;
-    }
+        .blue {
+            background: #00209f;
+            height: 60px;
+        }
 
-    @media (max-width: 768px) {
-      .lang p {
-        flex: 1 1 100%;
-      }
-    }
-  </style>
+        .red {
+            background: #d21034;
+            height: 60px;
+        }
+
+        /* COUPLETS */
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .couplet {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transform: translateY(40px);
+            opacity: 0;
+            transition: all 1s;
+        }
+
+        .couplet.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .lang {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .lang div {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        /* ANIMATIONS */
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes wave {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(2deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        footer {
+            margin: 40px;
+            opacity: 0.8;
+        }
+    </style>
 </head>
 
 <body>
-  <h1>Hymne de Dessalinne 🇭🇹</h1>
 
-  <div class="couplet">
-    <div class="lang">
-      <p> Pour le pays, pour les ancêtres
-Marchons unis, marchons unis
-Dans nos rangs point de traîtres
-Du sol soyons seuls maîtres
-Marchons unis, marchons unis
-Pour le pays, pour les ancêtres
-Marchons, marchons, marchons unis
-Pour le pays, pour les ancêtres 
-</p>
-      <p>Pou Peyi a, pou Zansèt yo, ann mache ini... (CR)</p>
+    <header>
+        <img src="drapeau.png" class="flag" alt="Drapeau d'Haïti">
+
+        <h1>Hymne National d’Haïti</h1>
+        <h2>La Dessalinienne 🇭🇹</h2>
+
+    </header>
+
+    <div class="container">
+
+        <div class="couplet">
+            <div class="lang">
+                <div>
+                    <b>Français</b><br><br>
+                    Pour le pays, pour les ancêtres<br>
+                    Marchons unis, marchons unis<br>
+                    Dans nos rangs point de traîtres<br>
+                    Du sol soyons seuls maîtres<br><br>
+                    Marchons unis, marchons unis<br>
+                    Pour le pays, pour les ancêtres<br>
+                    Marchons, marchons, marchons unis<br>
+                    Pour le pays, pour les ancêtres<br>
+                </div>
+
+                <div>
+                    <b>Créole</b><br><br>
+                    Pou Ayiti peyi zanset yo<br>
+                    Se pou n mache men nan lamen<br>
+                    Nan mitan n pa fet pou gen tret<br>
+                    Nou fet pou n sel met tet nou<br>
+                    Annou mache men nan lamen<br>
+                    Pou Ayiti ka vin pi bel<br>
+                    Annou, annou met tet ansanm<br>
+                    Pou Ayiti onon tout zanset yo.<br>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="couplet">
+            <div class="lang">
+                <div>
+                    <b>Français</b><br><br>
+                    Pour les aïeux, pour la patrie<br>
+                    Béchons joyeux, béchons joyeux<br>
+                    Quand le champ fructifie<br>
+                    L'âme se fortifie<br>
+                    Béchons joyeux, béchons joyeux<br>
+                    Pour les aïeux, pour la Patrie<br>
+                    Béchons, béchons, béchons joyeux<br>
+                    Pour les aïeux, pour la Patrie<br>
+                </div>
+
+                <div>
+                    <b>Créole</b><br><br>
+                    Pou Ayiti onon zanset yo<br>
+                    Se pou n sekle se pou n plante<br>
+                    Se nan te tout fos nou chita<br>
+                    Se li k ba nou manje<br>
+                    Ann mord à Ann Voye Wou<br>
+                    Ak ke kontan fok te a bay<br>
+                    Sekle wouze fanm kou gason<br>
+                    Pou n rive viv ak sel fos ponyet nou.<br>
+                </div>
+            </div>
+        </div>
+
+        <div class="couplet">
+            <div class="lang">
+                <div>
+                    <b>Français</b><br><br>
+                    Pour le pays et pour nos pères<br>
+                    Formons des fils, formons des fils<br>
+                    Libres, forts et prospères<br>
+                    Toujours nous serons frères<br>
+                    Formons des fils, formons des fils<br>
+                    Pour le pays et pour nos pères<br>
+                    Formons, formons, formons des fils<br>
+                    Pour le pays et pour nos pères<br>
+                </div>
+
+                <div>
+                    <b>Créole</b><br><br>
+                    Pou Ayiti ak pou zanset yo<br>
+                    Fo nou kapab vanyan gason<br>
+                    Moun pa fet pou ret avek moun<br>
+                    Se sa k fe tout manman ak tout papa<br>
+                    Dwe pou voye timoun lekol<br>
+                    Pou yo aprann pou yo konnen<br>
+                    Sa Tousen, Desalin, Kristof, Petyon<br>
+                    Te fe pou mouiller Ayisyen anba bot blan.<br>
+                </div>
+            </div>
+        </div>
+
+        <div class="couplet">
+            <div class="lang">
+                <div>
+                    <b>Français</b><br><br>
+                    Pour les aïeux, pour la patrie<br>
+                    Ô Dieu des preux, ô Dieu des preux<br>
+                    Sous ta garde infinie<br>
+                    Prends nos droits, notre vie<br>
+                    Ô Dieu des preux, ô Dieu des preux<br>
+                    Pour les aïeux, pour la Patrie<br>
+                    Ô Dieu, ô Dieu, ô Dieu des preux<br>
+                    Pour les aïeux, pour la Patrie<br>
+                </div>
+
+                <div>
+                    <b>Créole</b><br><br>
+                    Pou Ayiti onon zanset yo<br>
+                    Ann leve tet nou gad anle<br>
+                    Pou tout moun mande Granmet la<br>
+                    Pou l ba nou pwoteksyon<br>
+                    Pou move zanj pa detounen n<br>
+                    Pou n ka mache nan bon chimen<br>
+                    Pou libete ka libete<br>
+                    Fok lajistis blayi sou peyi a.<br>
+                </div>
+            </div>
+        </div>
+
+        <div class="couplet">
+            <div class="lang">
+                <div>
+                    <b>Français</b><br><br>
+                    Pour le drapeau, pour la Patrie<br>
+                    Mourir est beau, mourir est beau<br>
+                    Notre passé nous crie :<br>
+                    Ayez l'âme aguerrie<br>
+                    Mourir est beau, mourir est beau<br>
+                    Pour le drapeau, pour la Patrie<br>
+                    Mourir, mourir, mourir est beau<br>
+                    Pour le drapeau, pour la Patrie<br>
+                </div>
+
+                <div>
+                    <b>Créole</b><br><br>
+                    Nou gen yon drapo tankou tout pep<br>
+                    Se pou n renmen l mouri pou li<br>
+                    Se pa kado blan te fe nou<br>
+                    Se san zanset nou yo ke te koule<br>
+                    Pou nou kenbe drapo nou wo<br>
+                    Se pou n travay met tet ansanm<br>
+                    Pou lot peyi ka respekte l<br>
+                    Drapo sila a se nanm tout Ayisyen.<br>
+
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="couplet">
-    <div class="lang">
-      <p> Pour les aïeux, pour la patrie
-Béchons joyeux, béchons joyeux
-Quand le champ fructifie
-L'âme se fortifie
-Béchons joyeux, béchons joyeux
-Pour les aïeux, pour la Patrie
-Béchons, béchons, béchons joyeux
-Pour les aïeux, pour la Patrie </p>
-      <p>Pou zansèt yo, pou Patrie a, n’ap bèkè kè kontan... (CR)</p>
-    </div>
-  </div>
+    <footer>
+        &copy; 2026 Hymne de Dessalinne - by Ing Ranko Haiti
+    </footer>
 
-  <div class="couplet">
-    <div class="lang">
-      <p> Pour le pays et pour nos pères
-Formons des fils, formons des fils
-Libres, forts et prospères
-Toujours nous serons frères
-Formons des fils, formons des fils
-Pour le pays et pour nos pères
-Formons, formons, formons des fils
-Pour le pays et pour nos pères </p>
-      <p>Pou Drapo a, pou Patrie a, mouri se bèl bagay... (CR)</p>
-    </div>
-  </div>
+    <script>
 
+        /* Animation au scroll */
 
-  <div class="couplet">
-    <div class="lang">
-      <p>Pour les aïeux, pour la patrie
-Ô Dieu des preux, ô Dieu des preux
-Sous ta garde infinie
-Prends nos droits, notre vie
-Ô Dieu des preux, ô Dieu des preux
-Pour les aïeux, pour la Patrie
-Ô Dieu, ô Dieu, ô Dieu des preux
-Pour les aïeux, pour la Patrie </p>
-      <p>Pou Drapo a, pou Patrie a, mouri se bèl bagay... (CR)</p>
-    </div>
-  </div>
-  
-  
-  <div class="couplet">
-    <div class="lang">
-      <p>PPour le drapeau, pour la Patrie
-Mourir est beau, mourir est beau
-Notre passé nous crie :
-Ayez l'âme aguerrie
-Mourir est beau, mourir est beau
-Pour le drapeau, pour la Patrie
-Mourir, mourir, mourir est beau
-Pour le drapeau, pour la Patrie</p>
-      <p>Pou Drapo a, pou Patrie a, mouri se bèl bagay... (CR)</p>
-    </div>
-  </div>
-  
-  <footer>
-    &copy; 2026 Hymne de Dessalinne - Site animé et responsive
-  </footer>
+        const couplets = document.querySelectorAll(".couplet");
 
-  <script>
-    // Faire apparaître les couplets avec un petit delay
-    const couplets = document.querySelectorAll('.couplet');
-    couplets.forEach((c, i) => {
-      setTimeout(() => {
-        c.style.opacity = 1;
-      }, i * 400); // 0.4s entre chaque
-    });
-  </script>
+        window.addEventListener("scroll", () => {
+            couplets.forEach(c => {
+                let position = c.getBoundingClientRect().top;
+                let screen = window.innerHeight;
+
+                if (position < screen - 100) {
+                    c.classList.add("show");
+                }
+            });
+        });
+
+    </script>
+
 </body>
+
 </html>
