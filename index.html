@@ -96,6 +96,34 @@
             padding: 15px;
             border-radius: 8px;
         }
+/* Petit écran : cacher Créole par défaut et afficher le bouton */
+@media screen and (max-width: 768px) {
+    .lang div:nth-child(2) { /* Créole */
+        display: none;
+    }
+
+    #toggle-lang-global {
+        display: inline-block;
+        margin: 15px auto;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        background-color: #ffd700;
+        color: #00209f;
+        font-weight: bold;
+        cursor: pointer;
+    }
+}
+
+/* Grand écran : montrer les deux langues et cacher le bouton */
+@media screen and (min-width: 769px) {
+    .lang div:nth-child(1), .lang div:nth-child(2) {
+        display: block !important; /* Toujours afficher Français + Créole */
+    }
+    #toggle-lang-global {
+        display: none;
+    }
+}
 
         /* ANIMATIONS */
 
@@ -138,20 +166,21 @@
         <img src="drapeau.png" class="flag" alt="Drapeau d'Haïti">
 
         <h1>Hymne National d’Haïti</h1>
-        <h2>La Dessalinienne 🇭🇹</h2>
+        <h2>La Dessalinienne</h2>
 
     </header>
-
+<button id="toggle-lang-global">Afficher en Créole</button>
     <div class="container">
 
         <div class="couplet">
             <div class="lang">
                 <div>
                     <b>Français</b><br><br>
+					<b>I</b><br>
                     Pour le pays, pour les ancêtres<br>
                     Marchons unis, marchons unis<br>
                     Dans nos rangs point de traîtres<br>
-                    Du sol soyons seuls maîtres<br><br>
+                    Du sol soyons seuls maîtres<br>
                     Marchons unis, marchons unis<br>
                     Pour le pays, pour les ancêtres<br>
                     Marchons, marchons, marchons unis<br>
@@ -160,6 +189,7 @@
 
                 <div>
                     <b>Créole</b><br><br>
+					<b>I</b><br>
                     Pou Ayiti peyi zanset yo<br>
                     Se pou n mache men nan lamen<br>
                     Nan mitan n pa fet pou gen tret<br>
@@ -176,7 +206,7 @@
         <div class="couplet">
             <div class="lang">
                 <div>
-                    <b>Français</b><br><br>
+                    <b>II</b><br><br>
                     Pour les aïeux, pour la patrie<br>
                     Béchons joyeux, béchons joyeux<br>
                     Quand le champ fructifie<br>
@@ -188,7 +218,7 @@
                 </div>
 
                 <div>
-                    <b>Créole</b><br><br>
+                    <b>II</b><br><br>
                     Pou Ayiti onon zanset yo<br>
                     Se pou n sekle se pou n plante<br>
                     Se nan te tout fos nou chita<br>
@@ -204,7 +234,7 @@
         <div class="couplet">
             <div class="lang">
                 <div>
-                    <b>Français</b><br><br>
+                    <b>III</b><br><br>
                     Pour le pays et pour nos pères<br>
                     Formons des fils, formons des fils<br>
                     Libres, forts et prospères<br>
@@ -216,7 +246,7 @@
                 </div>
 
                 <div>
-                    <b>Créole</b><br><br>
+                    <b>III</b><br><br>
                     Pou Ayiti ak pou zanset yo<br>
                     Fo nou kapab vanyan gason<br>
                     Moun pa fet pou ret avek moun<br>
@@ -232,7 +262,7 @@
         <div class="couplet">
             <div class="lang">
                 <div>
-                    <b>Français</b><br><br>
+                    <b>IV</b><br><br>
                     Pour les aïeux, pour la patrie<br>
                     Ô Dieu des preux, ô Dieu des preux<br>
                     Sous ta garde infinie<br>
@@ -244,7 +274,7 @@
                 </div>
 
                 <div>
-                    <b>Créole</b><br><br>
+                    <b>IV</b><br><br>
                     Pou Ayiti onon zanset yo<br>
                     Ann leve tet nou gad anle<br>
                     Pou tout moun mande Granmet la<br>
@@ -260,7 +290,7 @@
         <div class="couplet">
             <div class="lang">
                 <div>
-                    <b>Français</b><br><br>
+                    <b>V</b><br><br>
                     Pour le drapeau, pour la Patrie<br>
                     Mourir est beau, mourir est beau<br>
                     Notre passé nous crie :<br>
@@ -272,7 +302,7 @@
                 </div>
 
                 <div>
-                    <b>Créole</b><br><br>
+                    <b>V</b><br><br>
                     Nou gen yon drapo tankou tout pep<br>
                     Se pou n renmen l mouri pou li<br>
                     Se pa kado blan te fe nou<br>
@@ -307,7 +337,46 @@
                 }
             });
         });
+       // Fonction pour basculer toutes les langues
+const toggleGlobal = document.getElementById("toggle-lang-global");
+let showingCreole = false; // état actuel pour petit écran
 
+function updateCouplets() {
+    const couplets = document.querySelectorAll(".couplet .lang");
+
+    // Vérifier si on est en petit écran
+    const isSmallScreen = window.innerWidth <= 768;
+
+    couplets.forEach(langDiv => {
+        const french = langDiv.children[0];
+        const creole = langDiv.children[1];
+
+        if (isSmallScreen) {
+            french.style.display = showingCreole ? "none" : "block";
+            creole.style.display = showingCreole ? "block" : "none";
+        } else {
+            french.style.display = "block";
+            creole.style.display = "block";
+        }
+    });
+
+    // Mettre à jour le texte du bouton
+    if (isSmallScreen) {
+        toggleGlobal.textContent = showingCreole ? "Afficher en Français" : "Afficher en Créole";
+    }
+}
+
+// Événement clic sur le bouton
+toggleGlobal.addEventListener("click", () => {
+    showingCreole = !showingCreole;
+    updateCouplets();
+});
+
+// Événement resize pour revenir à l'état original si écran grand
+window.addEventListener("resize", updateCouplets);
+
+// Initialisation au chargement
+updateCouplets();
     </script>
 
 </body>
