@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Intra - Gestion de Projet & Agile</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 28px 16px;
+      text-align: center;
+    }
+    header h1 { margin: 0; font-size: 28px; }
+    header p { margin: 8px 0 0; color: #cbd5e1; }
+    .container {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      margin-bottom: 18px;
+    }
+    .rules ul { line-height: 1.8; }
+    .topbar {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .badge {
+      background: #e2e8f0;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: bold;
+    }
+    .progress-wrap {
+      background: #e5e7eb;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 12px 0 20px;
+    }
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: #2563eb;
+      transition: width 0.25s;
+    }
+    .question {
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 18px;
+    }
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+    .option {
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 13px;
+      cursor: pointer;
+      background: white;
+      transition: 0.2s;
+    }
+    .option:hover { border-color: #2563eb; background: #eff6ff; }
+    .option.correct { border-color: #16a34a; background: #dcfce7; }
+    .option.wrong { border-color: #dc2626; background: #fee2e2; }
+    .explanation {
+      margin-top: 15px;
+      padding: 14px;
+      background: #f8fafc;
+      border-left: 5px solid #2563eb;
+      display: none;
+      border-radius: 8px;
+      line-height: 1.6;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+    }
+    button.secondary { background: #475569; }
+    button.danger { background: #dc2626; }
+    button:disabled { background: #94a3b8; cursor: not-allowed; }
+    .result {
+      text-align: center;
+      display: none;
+    }
+    .result h2 { font-size: 30px; }
+    .small { color: #64748b; font-size: 14px; }
+    footer {
+      text-align: center;
+      color: #64748b;
+      padding: 24px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Quiz Intra - Gestion de Projet & Agile</h1>
+    <p>100 questions pour réviser Scrum, Agile, MOA/MOE, vélocité, PERT, UML et planification</p>
+  </header>
+
+  <main class="container">
+    <section class="card rules" id="rulesCard">
+      <h2>Règles du jeu</h2>
+      <ul>
+        <li>Le quiz contient <strong>100 questions</strong>.</li>
+        <li>Chaque bonne réponse vaut <strong>1 point</strong>.</li>
+        <li>Après chaque réponse, une correction apparaît.</li>
+        <li>Objectif minimum : <strong>65/100</strong>.</li>
+        <li>Objectif excellence : <strong>85/100 ou plus</strong>.</li>
+      </ul>
+      <button onclick="startQuiz()">Commencer le quiz</button>
+    </section>
+
+    <section class="card" id="quizCard" style="display:none;">
+      <div class="topbar">
+        <span class="badge" id="questionCount">Question 1/100</span>
+        <span class="badge" id="scoreCount">Score : 0</span>
+      </div>
+      <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+      <div class="question" id="questionText"></div>
+      <div class="options" id="optionsBox"></div>
+      <div class="explanation" id="explanationBox"></div>
+      <div class="actions">
+        <button class="secondary" onclick="previousQuestion()" id="prevBtn">Précédent</button>
+        <button onclick="nextQuestion()" id="nextBtn" disabled>Suivant</button>
+      </div>
+    </section>
+
+    <section class="card result" id="resultCard">
+      <h2>Résultat final</h2>
+      <p id="finalScore" style="font-size:24px;font-weight:bold;"></p>
+      <p id="finalMessage"></p>
+      <button onclick="restartQuiz()">Recommencer</button>
+      <button class="secondary" onclick="reviewMistakes()">Revoir les questions</button>
+    </section>
+  </main>
+
+  <footer>Préparation intra - Projet de fin d’études / Gestion de projet</footer>
+
+  <script>
+    const questions = [
+      {q:"Scrum est principalement :", o:["Un langage de programmation","Un cadre de travail Agile","Une base de données","Un logiciel de design"], a:1, e:"Scrum est un cadre de travail Agile permettant de gérer des projets complexes par itérations."},
+      {q:"Les trois piliers de Scrum sont :", o:["Coût, délai, qualité","Transparence, inspection, adaptation","Analyse, développement, livraison","Budget, risque, planning"], a:1, e:"Scrum repose sur la transparence, l’inspection et l’adaptation."},
+      {q:"Le Product Owner est responsable principalement de :", o:["Coder le backend","Gérer et prioriser le Product Backlog","Tester le logiciel","Acheter les serveurs"], a:1, e:"Le Product Owner maximise la valeur du produit et gère le Product Backlog."},
+      {q:"Le Scrum Master sert surtout à :", o:["Commander l’équipe","Faciliter Scrum et enlever les obstacles","Remplacer le client","Faire uniquement les tests"], a:1, e:"Le Scrum Master facilite l’application de Scrum et aide l’équipe à progresser."},
+      {q:"Un Sprint est :", o:["Une phase sans fin","Une période courte pour produire un incrément","Une réunion annuelle","Une méthode de paiement"], a:1, e:"Un Sprint est une itération courte, souvent de 2 à 4 semaines."},
+      {q:"Dans Scrum, l’incrément est :", o:["Une version fonctionnelle du produit","Un budget additionnel","Une erreur de code","Un contrat"], a:0, e:"L’incrément est le résultat utilisable et potentiellement livrable produit à la fin du Sprint."},
+      {q:"Le Product Backlog contient :", o:["Les salaires","La liste priorisée du travail à faire","Les mots de passe","Les factures uniquement"], a:1, e:"Le Product Backlog regroupe fonctionnalités, bugs, tâches et besoins techniques."},
+      {q:"Les Story Points servent à mesurer :", o:["La beauté de l’interface","L’effort et la complexité","La taille de l’écran","Le nombre d’utilisateurs"], a:1, e:"Les Story Points estiment l’effort, la complexité et le risque d’une user story."},
+      {q:"La vélocité Agile indique :", o:["Le prix du projet","La quantité de travail livrée par sprint","Le nombre de réunions","Le nombre de fichiers"], a:1, e:"La vélocité permet de prévoir la capacité de travail d’une équipe par Sprint."},
+      {q:"La méthode Agile privilégie :", o:["La rigidité","L’adaptation aux changements","L’absence de client","La documentation seule"], a:1, e:"Agile favorise la flexibilité, la collaboration et la livraison fréquente."},
+
+      {q:"La méthode en cascade est plutôt :", o:["Itérative","Linéaire et séquentielle","Sans plan","Visuelle uniquement"], a:1, e:"La cascade suit des phases successives : analyse, conception, développement, tests, livraison."},
+      {q:"Dans Agile, la principale mesure du progrès est :", o:["Le logiciel fonctionnel","Le nombre de pages du rapport","Le nombre de réunions","Le nombre d’emails"], a:0, e:"Le logiciel fonctionnel est une valeur clé de l’Agile."},
+      {q:"Une équipe Scrum doit être :", o:["Auto-organisée et pluridisciplinaire","Dirigée uniquement par le prof","Composée seulement de testeurs","Sans responsabilité"], a:0, e:"L’équipe Scrum s’organise elle-même et possède plusieurs compétences."},
+      {q:"Le Daily Scrum dure normalement :", o:["15 minutes","2 heures","1 journée","4 heures"], a:0, e:"La mêlée quotidienne est limitée à 15 minutes."},
+      {q:"Le Sprint Review sert à :", o:["Présenter et inspecter l’incrément","Punir l’équipe","Écrire les contrats","Supprimer le backlog"], a:0, e:"La revue de Sprint permet de montrer le travail terminé et de recueillir des retours."},
+      {q:"Le Sprint Retrospective sert à :", o:["Améliorer la façon de travailler","Créer uniquement le budget","Vendre le produit","Remplacer le PO"], a:0, e:"La rétrospective permet d’améliorer le processus de travail de l’équipe."},
+      {q:"Dans Scrum, le Sprint Backlog est :", o:["La liste du travail choisi pour le Sprint","La liste des clients","Le planning annuel","Le compte bancaire"], a:0, e:"Le Sprint Backlog contient les items sélectionnés pour le Sprint et le plan de réalisation."},
+      {q:"La vélocité optimiste correspond à :", o:["Meilleur scénario","Scénario difficile","Scénario moyen","Aucun scénario"], a:0, e:"La vélocité optimiste estime ce que l’équipe peut livrer dans les meilleures conditions."},
+      {q:"La vélocité pessimiste correspond à :", o:["Meilleur scénario","Scénario difficile","Scénario moyen","Scénario idéal"], a:1, e:"Elle représente une estimation basse en cas de difficultés."},
+      {q:"La vélocité réaliste correspond à :", o:["Capacité moyenne soutenable","Capacité impossible","Zéro travail","Meilleur cas uniquement"], a:0, e:"Elle représente la capacité moyenne que l’équipe peut maintenir."},
+
+      {q:"Si le backlog contient 200 USP et la vélocité est 25 USP/sprint, il faut :", o:["4 sprints","8 sprints","10 sprints","25 sprints"], a:1, e:"200 ÷ 25 = 8 sprints."},
+      {q:"Si 8 sprints durent chacun 2 semaines, la durée totale est :", o:["8 semaines","12 semaines","16 semaines","20 semaines"], a:2, e:"8 × 2 = 16 semaines."},
+      {q:"La MOA représente :", o:["Le commanditaire / client du projet","L’équipe qui code","Le serveur","Le testeur"], a:0, e:"La Maîtrise d’Ouvrage définit les besoins, les objectifs, le budget et valide le résultat."},
+      {q:"La MOE représente :", o:["L’exécutant du projet","Le client final uniquement","Le fournisseur d’internet","Le backlog"], a:0, e:"La Maîtrise d’Œuvre réalise concrètement le projet pour la MOA."},
+      {q:"L’AMOA sert à :", o:["Faire le lien entre MOA et MOE","Supprimer la MOA","Coder seule","Acheter les licences"], a:0, e:"L’Assistance à Maîtrise d’Ouvrage aide la MOA dans les projets techniques."},
+      {q:"Un projet est :", o:["Permanent","Temporaire, unique et orienté objectif","Toujours gratuit","Sans date de fin"], a:1, e:"Un projet a un début, une fin, un objectif et un résultat attendu."},
+      {q:"La gestion de projet consiste à :", o:["Planifier, coordonner et contrôler les ressources","Faire seulement du design","Écrire uniquement un rapport","Ignorer les risques"], a:0, e:"Elle organise ressources, délais, coûts et qualité pour atteindre un objectif."},
+      {q:"Le triangle classique du projet comprend :", o:["Coût, délai, qualité/périmètre","HTML, CSS, JS","Client, serveur, base","Rouge, bleu, vert"], a:0, e:"Un projet est souvent contraint par le coût, le délai et la qualité/périmètre."},
+      {q:"Le WBS sert à :", o:["Décomposer le projet en tâches","Mesurer la couleur","Remplacer Scrum","Supprimer les tests"], a:0, e:"Le Work Breakdown Structure découpe le projet en lots et tâches gérables."},
+      {q:"Le diagramme de Gantt sert à :", o:["Visualiser le planning dans le temps","Coder une API","Stocker des données","Faire un logo"], a:0, e:"Le Gantt montre les tâches, durées et périodes sur une ligne de temps."},
+
+      {q:"La méthode PERT sert principalement à :", o:["Analyser les dépendances et le chemin critique","Faire une page web","Créer une image","Calculer un salaire net"], a:0, e:"PERT aide à ordonnancer les tâches et identifier le chemin critique."},
+      {q:"En PERT, O signifie :", o:["Optimiste","Ordre","Organisation","Objectif final"], a:0, e:"O est la durée optimiste."},
+      {q:"En PERT, P signifie :", o:["Pessimiste","Projet","Produit","Planning"], a:0, e:"P est la durée pessimiste."},
+      {q:"En PERT, M signifie :", o:["Durée la plus probable","Mémoire","Montant","Module"], a:0, e:"M est la durée la plus probable."},
+      {q:"La formule PERT de durée moyenne est :", o:["(O + 4M + P) / 6","O + P","M / 6","O × M × P"], a:0, e:"La durée attendue PERT est (O + 4M + P) / 6."},
+      {q:"Le chemin critique est :", o:["La suite des tâches sans marge","La tâche la moins chère","La liste des bugs","La réunion quotidienne"], a:0, e:"Toute tâche critique retardée retarde le projet."},
+      {q:"Une marge nulle signifie :", o:["Tâche critique","Tâche inutile","Tâche optionnelle","Tâche terminée"], a:0, e:"Une marge de 0 indique que la tâche ne peut pas prendre de retard."},
+      {q:"Kanban repose surtout sur :", o:["La visualisation du flux de travail","Des sprints obligatoires","Un Product Owner obligatoire","Un seul développeur"], a:0, e:"Kanban visualise les tâches dans des colonnes : à faire, en cours, terminé."},
+      {q:"Kanban limite souvent :", o:["Le travail en cours (WIP)","Le nombre de clients","Le nombre de professeurs","Le salaire"], a:0, e:"Limiter le WIP évite la surcharge et améliore le flux."},
+      {q:"Scrum livre plutôt :", o:["À la fin de chaque Sprint","Une seule fois après 5 ans","Jamais","Avant l’analyse"], a:0, e:"Scrum livre un incrément à la fin de chaque Sprint."},
+
+      {q:"Kanban livre plutôt :", o:["En continu","Uniquement à la fin de l’année","Jamais","Avant chaque réunion"], a:0, e:"Kanban favorise la livraison continue."},
+      {q:"Un Product Backlog doit être :", o:["Visible, clair et priorisé","Secret","Incomplet volontairement","Sans ordre"], a:0, e:"Le backlog doit être transparent et ordonné pour guider l’équipe."},
+      {q:"Le PO est :", o:["Une personne, pas un comité","Toujours un serveur","Un outil logiciel","Un type de bug"], a:0, e:"Dans Scrum, le Product Owner est une seule personne responsable du backlog."},
+      {q:"Le Scrum Master est un :", o:["Leader serviteur","Chef autoritaire","Client final","Comptable uniquement"], a:0, e:"Le Scrum Master sert l’équipe, facilite et enlève les obstacles."},
+      {q:"Une bonne user story exprime :", o:["Un besoin utilisateur","Une facture","Un mot de passe","Une couleur seulement"], a:0, e:"Une user story décrit une fonctionnalité du point de vue utilisateur."},
+      {q:"Le périmètre d’un projet signifie :", o:["Ce qui est inclus et exclu","Le prix uniquement","La police du document","La couleur du logo"], a:0, e:"Le périmètre définit les limites du projet."},
+      {q:"Un livrable est :", o:["Un résultat produit par le projet","Une absence","Un obstacle","Un salaire"], a:0, e:"Un livrable est un document, prototype, rapport ou résultat attendu."},
+      {q:"Un risque projet est :", o:["Un événement incertain pouvant affecter le projet","Une tâche terminée","Une réunion réussie","Un fichier Word"], a:0, e:"Un risque a une probabilité et un impact."},
+      {q:"La mitigation signifie :", o:["Réduire la probabilité ou l’impact d’un risque","Ignorer le risque","Arrêter le projet","Supprimer l’équipe"], a:0, e:"La mitigation vise à limiter les effets négatifs d’un risque."},
+      {q:"La contingence est :", o:["Un plan B si le risque survient","Une couleur","Un rôle Scrum","Un outil UML"], a:0, e:"La contingence est l’action prévue lorsque le risque se réalise."},
+
+      {q:"Dans ECOSIAPHAR, le patient utilise surtout :", o:["Le portail public de recherche","Le backend serveur","La gestion des employés","La base SQL directement"], a:0, e:"Le patient recherche les médicaments et localise les pharmacies."},
+      {q:"Dans ECOSIAPHAR, le pharmacien utilise surtout :", o:["Le POS et le stock","Le registre national","La direction de l’État","Le cahier uniquement"], a:0, e:"Le pharmacien vend, consulte le stock et utilise le système de point de vente."},
+      {q:"Dans ECOSIAPHAR, l’administrateur de pharmacie peut :", o:["Gérer utilisateurs, médicaments et stock","Seulement chercher un médicament","Supprimer Internet","Créer le prof"], a:0, e:"L’administrateur gère l’espace pharmacie."},
+      {q:"Dans ECOSIAPHAR, l’IA du prototype doit être surtout :", o:["Textuelle et progressive","Médicale et diagnostique","Magique","Sans limites"], a:0, e:"Le prototype doit commencer par une assistance textuelle réaliste."},
+      {q:"Pourquoi ne pas promettre une IA médicale complète ?", o:["Parce que c’est risqué et complexe","Parce que c’est trop simple","Parce que ça ne coûte rien","Parce que le patient n’existe pas"], a:0, e:"Le projet étudiant doit rester crédible et éviter les promesses médicales sensibles."},
+      {q:"Un système SaaS signifie :", o:["Logiciel accessible comme service","Serveur sans utilisateur","Script automatique simple","Stockage papier"], a:0, e:"SaaS = Software as a Service, souvent accessible via abonnement."},
+      {q:"Multi-tenant signifie :", o:["Une même plateforme sert plusieurs organisations isolées","Une seule pharmacie uniquement","Un seul utilisateur","Aucun abonnement"], a:0, e:"Une architecture multi-tenant permet à plusieurs pharmacies d’utiliser la même plateforme avec séparation des données."},
+      {q:"Le mode hors ligne avec synchronisation sert à :", o:["Continuer à travailler malgré une connexion instable","Supprimer les données","Éviter le stock","Faire du design"], a:0, e:"Il permet d’enregistrer des opérations puis de synchroniser quand Internet revient."},
+      {q:"Une architecture modulaire permet :", o:["D’ajouter des fonctionnalités progressivement","D’interdire les améliorations","De tout refaire à chaque fois","De supprimer les tests"], a:0, e:"La modularité facilite l’évolution du système."},
+      {q:"Le POS signifie :", o:["Système de point de vente","Plan officiel Scrum","Produit organisé sécurisé","Processus oral simple"], a:0, e:"POS = Point of Sale, système utilisé pour enregistrer les ventes."},
+
+      {q:"La documentation exhaustive est moins valorisée que :", o:["Le logiciel fonctionnel","Le silence","Le budget caché","La théorie seule"], a:0, e:"C’est une valeur du Manifeste Agile."},
+      {q:"La collaboration client est plus valorisée que :", o:["La négociation contractuelle","Le test utilisateur","La livraison continue","Le feedback"], a:0, e:"Agile favorise la collaboration avec le client."},
+      {q:"L’adaptation est plus valorisée que :", o:["Le suivi strict d’un plan","La communication","La qualité","La livraison"], a:0, e:"Agile valorise la réponse au changement."},
+      {q:"Une équipe Agile doit maintenir :", o:["Un rythme soutenable","Un rythme impossible","Aucune communication","Un planning secret"], a:0, e:"Agile recommande un rythme soutenable."},
+      {q:"En Scrum, si l’objectif du Sprint devient inutile, le Sprint peut être :", o:["Annulé par le Product Owner","Supprimé par le testeur","Transformé en budget","Allongé automatiquement"], a:0, e:"Seul le Product Owner peut annuler un Sprint."},
+      {q:"Le Sprint Planning répond à :", o:["Quoi faire et comment le faire","Qui est absent","Combien coûte Word","Quelle couleur choisir"], a:0, e:"La planification définit ce qui peut être terminé et comment le travail sera réalisé."},
+      {q:"Le Daily Scrum sert à planifier :", o:["Les prochaines 24 heures","Les 5 prochaines années","Les vacances","Le budget national"], a:0, e:"Il synchronise l’équipe quotidiennement."},
+      {q:"Les trois questions classiques du Daily Scrum concernent :", o:["Hier, aujourd’hui, obstacles","Budget, salaire, vacances","Client, contrat, facture","Design, couleur, logo"], a:0, e:"Chaque membre partage ce qu’il a fait, fera et les blocages."},
+      {q:"Un incrément terminé doit être :", o:["Utilisable et potentiellement livrable","Secret et incomplet","Sans test","Uniquement théorique"], a:0, e:"L’incrément doit répondre à la définition de terminé."},
+      {q:"La définition de terminé sert à :", o:["S’assurer que tout le monde comprend quand une tâche est réellement finie","Changer le backlog","Annuler les réunions","Éviter les tests"], a:0, e:"Elle garantit une compréhension commune de la qualité attendue."},
+
+      {q:"Dans la planification, identifier les parties prenantes sert à :", o:["Connaître les acteurs influents et concernés","Créer une image","Supprimer les risques","Remplacer le client"], a:0, e:"Les parties prenantes influencent ou sont affectées par le projet."},
+      {q:"Un objectif SMART est :", o:["Spécifique, Mesurable, Atteignable, Réaliste, Temporel","Simple, Magique, Automatique, Rapide, Technique","Sans mesure","Toujours financier"], a:0, e:"SMART aide à formuler des objectifs clairs."},
+      {q:"La planification budgétaire consiste à :", o:["Évaluer les coûts et prévoir une marge","Ignorer les dépenses","Développer uniquement le frontend","Changer le nom du projet"], a:0, e:"Elle estime les coûts par activité et construit un budget global."},
+      {q:"Le registre des risques contient :", o:["Risques, impacts, réponses","Les mots de passe","Les couleurs du site","Les notes finales"], a:0, e:"Il sert à suivre les risques et plans d’action."},
+      {q:"Une matrice RACI sert à :", o:["Clarifier les rôles et responsabilités","Calculer les taxes","Créer une base SQL","Dessiner un logo"], a:0, e:"RACI = Responsable, Approuve, Consulté, Informé."},
+      {q:"Le modèle en V met l’accent sur :", o:["La validation et les tests liés aux phases","La livraison continue","Aucun test","Les story points"], a:0, e:"Chaque phase de développement correspond à une phase de test."},
+      {q:"Le modèle en spirale est recommandé pour :", o:["Projets complexes et risqués","Petits devoirs simples","Projets sans risque","Rapports uniquement"], a:0, e:"Il combine itérations et analyse des risques."},
+      {q:"Le modèle itératif produit :", o:["Des versions partielles améliorées progressivement","Un seul résultat final sans retour","Aucune version","Un budget uniquement"], a:0, e:"Chaque itération améliore le produit."},
+      {q:"Un tableau Kanban contient souvent :", o:["À faire, En cours, Terminé","Budget, salaire, note","Client, serveur, police","MOA, MOE uniquement"], a:0, e:"Ces colonnes permettent de visualiser le flux."},
+      {q:"Limiter le WIP signifie :", o:["Limiter le nombre de tâches en cours","Limiter les utilisateurs","Supprimer le planning","Ajouter des bugs"], a:0, e:"Cela évite que l’équipe se disperse."},
+
+      {q:"La recette du projet est :", o:["La validation/livraison du résultat final","Une recette de cuisine","Un bug","Un sprint"], a:0, e:"La recette est l’acceptation du résultat par le client/MOA."},
+      {q:"Le chef de projet doit :", o:["Coordonner, planifier et rendre compte","Coder seul tout le projet","Ignorer l’équipe","Changer le sujet chaque jour"], a:0, e:"Il organise les moyens, suit les délais, coûts et qualité."},
+      {q:"Une compétence est :", o:["L’application concrète de connaissances","Un fait appris uniquement","Une note","Une réunion"], a:0, e:"La compétence est un savoir-agir dans une situation."},
+      {q:"Une soft skill importante en projet est :", o:["Communication","Stockage SQL uniquement","Couleur d’écran","Police Arial"], a:0, e:"Communication, leadership et gestion des conflits sont essentiels."},
+      {q:"La visibilité d’un projet sert à :", o:["Communiquer clairement l’avancement et renforcer la confiance","Cacher les problèmes","Supprimer les réunions","Ne rien documenter"], a:0, e:"La visibilité aide les parties prenantes à suivre le projet."},
+      {q:"Un rapport de suivi d’itération doit montrer :", o:["Avancement, problèmes, actions, prochaines étapes","Uniquement des images","Rien d’important","Seulement le titre"], a:0, e:"Il sert à contrôler et améliorer l’itération."},
+      {q:"La qualité du français est importante car :", o:["Elle peut être évaluée et pénalisée","Elle ne compte jamais","Elle remplace le prototype","Elle annule les tests"], a:0, e:"Un document professionnel doit être clair et correct."},
+      {q:"Dans ECOSIAPHAR, la marketplace et la livraison sont :", o:["Des évolutions futures","Le cœur obligatoire du prototype","À supprimer totalement","Déjà faites automatiquement"], a:0, e:"Elles sont prévues plus tard, après le prototype de base."},
+      {q:"Dans ECOSIAPHAR, une bonne priorité de développement est :", o:["Stock, médicaments, ventes, recherche patient, IA simple","Livraison avancée avant tout","Logo avant base de données","OCR complet en premier"], a:0, e:"Il faut construire d’abord le cœur fonctionnel."},
+      {q:"Pourquoi commencer par un prototype ?", o:["Pour démontrer la faisabilité avant l’extension","Pour éviter tout test","Pour ne jamais livrer","Pour supprimer le client"], a:0, e:"Le prototype permet de tester la solution et recevoir des retours."},
+
+      {q:"Dans un projet Agile, le feedback sert à :", o:["Adapter et améliorer le produit","Bloquer l’équipe","Remplacer la base de données","Ignorer le client"], a:0, e:"Les retours orientent les améliorations successives."},
+      {q:"Une approche agile dans ECOSIAPHAR signifie :", o:["Livrer progressivement des modules fonctionnels","Attendre août pour tout tester","Ne jamais planifier","Changer de projet"], a:0, e:"L’équipe peut avancer par incréments : stock, POS, recherche, IA."},
+      {q:"Le test en continu permet :", o:["Détecter les bugs tôt","Attendre la fin pour découvrir les problèmes","Supprimer la qualité","Réduire la communication"], a:0, e:"Tester tôt évite l’accumulation de bugs."},
+      {q:"Une bonne estimation de coût se base sur :", o:["Ressources, durée, complexité, infrastructure","Un chiffre au hasard","Seulement le nom du projet","La couleur de l’interface"], a:0, e:"Les coûts viennent du temps, des ressources humaines, outils et complexité."},
+      {q:"Le coût initial global estimé d’ECOSIAPHAR est surtout lié à :", o:["Développement, cloud, maintenance, formation","Uniquement au logo","Aux vacances","Au nom du projet"], a:0, e:"Ces catégories structurent les coûts du prototype."},
+      {q:"Un abonnement SaaS sert à :", o:["Générer des revenus récurrents","Supprimer les utilisateurs","Éviter la maintenance","Rendre le projet gratuit"], a:0, e:"Le modèle SaaS repose souvent sur un abonnement mensuel ou annuel."},
+      {q:"Si une équipe livre moins que prévu à chaque sprint, elle doit :", o:["Réviser sa vélocité et réduire la charge","Augmenter les tâches au hasard","Ignorer le problème","Supprimer Scrum"], a:0, e:"La planification doit s’adapter à la capacité réelle."},
+      {q:"Le client/Product Owner intervient surtout pour :", o:["Prioriser et valider la valeur","Coder la base","Corriger tous les bugs","Installer Apache"], a:0, e:"Le PO aide à orienter l’équipe vers ce qui apporte le plus de valeur."},
+      {q:"Dans Scrum, l’équipe de développement est responsable de :", o:["Créer l’incrément","Gérer seule le budget du client","Annuler tous les sprints","Rédiger la loi"], a:0, e:"L’équipe développe les éléments choisis pour produire un incrément."},
+      {q:"La meilleure stratégie de révision pour l’intra est :", o:["Comprendre les concepts et pratiquer des questions","Tout apprendre par cœur sans comprendre","Lire sans répondre","Attendre la veille"], a:0, e:"Compréhension + pratique = préparation efficace."},
+
+      {q:"Quel outil peut servir à gérer visuellement les tâches ?", o:["Trello","Photoshop uniquement","WhatsApp seulement","Calculatrice"], a:0, e:"Trello est souvent utilisé comme tableau Kanban simple."},
+      {q:"Dans un Gantt, une tâche longue apparaît comme :", o:["Une barre sur une période","Un cercle sans date","Un mot de passe","Un symbole dollar"], a:0, e:"Le Gantt représente les tâches avec des barres temporelles."},
+      {q:"Le chemin critique retarde le projet si :", o:["Une tâche critique prend du retard","Une tâche non critique finit tôt","Un document change de police","Un membre pose une question"], a:0, e:"Les tâches critiques déterminent la durée minimale du projet."},
+      {q:"Une équipe de moins de 3 développeurs peut avoir :", o:["Peu d’interactions et compétences limitées","Trop de coordination","Aucun risque","Toujours plus de productivité"], a:0, e:"Une équipe trop petite peut manquer de compétences et d’interaction."},
+      {q:"Une équipe trop grande peut créer :", o:["Trop de coordination complexe","Moins de communication","Aucun problème","Une vitesse infinie"], a:0, e:"Plus l’équipe est grande, plus la coordination devient difficile."},
+      {q:"Le Sprint Goal est :", o:["L’objectif du Sprint","Le budget final","La liste des clients","Le serveur Laravel"], a:0, e:"Il donne à l’équipe la raison de construire l’incrément."},
+      {q:"Le Product Backlog peut évoluer par :", o:["Ajouts, suppressions et priorisation","Interdiction de changement","Suppression des stories","Fin du projet"], a:0, e:"Le backlog est vivant et évolue selon les besoins."},
+      {q:"L’amélioration continue signifie :", o:["Analyser et améliorer régulièrement la manière de travailler","Tout garder pareil","Interdire les retours","Travailler sans réunion"], a:0, e:"C’est un principe Agile et Kanban important."},
+      {q:"La sécurité des données dans ECOSIAPHAR est importante car :", o:["Le système gère pharmacies, utilisateurs et ventes","Il ne contient aucune donnée","Il sert juste à décorer","Il fonctionne sans utilisateurs"], a:0, e:"Les informations de pharmacie et transactions doivent être protégées."},
+      {q:"La meilleure réponse à ‘Scrum est-il une méthode complète ?’ est :", o:["Non, c’est un cadre de travail","Oui, c’est un langage","Oui, c’est une base de données","Non, c’est un serveur"], a:0, e:"Scrum est un framework léger, pas une méthode de développement complète."}
+    ];
+
+    let current = 0;
+    let score = 0;
+    let answered = Array(questions.length).fill(null);
+
+    function startQuiz(){
+      document.getElementById('rulesCard').style.display = 'none';
+      document.getElementById('quizCard').style.display = 'block';
+      renderQuestion();
+    }
+
+    function renderQuestion(){
+      const item = questions[current];
+      document.getElementById('questionCount').textContent = `Question ${current+1}/${questions.length}`;
+      document.getElementById('scoreCount').textContent = `Score : ${score}`;
+      document.getElementById('progress').style.width = `${((current+1)/questions.length)*100}%`;
+      document.getElementById('questionText').textContent = item.q;
+      const box = document.getElementById('optionsBox');
+      const exp = document.getElementById('explanationBox');
+      box.innerHTML = '';
+      exp.style.display = 'none';
+      exp.textContent = item.e;
+      document.getElementById('nextBtn').disabled = answered[current] === null;
+      document.getElementById('prevBtn').disabled = current === 0;
+
+      item.o.forEach((opt, index) => {
+        const div = document.createElement('div');
+        div.className = 'option';
+        div.textContent = opt;
+        div.onclick = () => selectAnswer(index);
+        if(answered[current] !== null){
+          if(index === item.a) div.classList.add('correct');
+          if(index === answered[current] && index !== item.a) div.classList.add('wrong');
+          exp.style.display = 'block';
+        }
+        box.appendChild(div);
+      });
+    }
+
+    function selectAnswer(index){
+      if(answered[current] !== null) return;
+      answered[current] = index;
+      if(index === questions[current].a) score++;
+      renderQuestion();
+    }
+
+    function nextQuestion(){
+      if(current < questions.length - 1){
+        current++;
+        renderQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function previousQuestion(){
+      if(current > 0){
+        current--;
+        renderQuestion();
+      }
+    }
+
+    function finishQuiz(){
+      document.getElementById('quizCard').style.display = 'none';
+      document.getElementById('resultCard').style.display = 'block';
+      document.getElementById('finalScore').textContent = `${score}/100`;
+      let msg = '';
+      if(score >= 85) msg = 'Excellent ! Tu es prêt(e) pour l’intra.';
+      else if(score >= 65) msg = 'Bien ! Tu passes, mais révise encore les corrections.';
+      else msg = 'Il faut revoir les notions clés : Scrum, Agile, vélocité, MOA/MOE et PERT.';
+      document.getElementById('finalMessage').textContent = msg;
+    }
+
+    function restartQuiz(){
+      current = 0;
+      score = 0;
+      answered = Array(questions.length).fill(null);
+      document.getElementById('resultCard').style.display = 'none';
+      document.getElementById('rulesCard').style.display = 'block';
+    }
+
+    function reviewMistakes(){
+      current = 0;
+      document.getElementById('resultCard').style.display = 'none';
+      document.getElementById('quizCard').style.display = 'block';
+      renderQuestion();
+    }
+  </script>
+</body>
+</html>
